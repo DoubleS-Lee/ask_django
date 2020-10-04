@@ -1,0 +1,50 @@
+{% extends "instagram/layout.html" %}
+{% load bootstrap4 %}
+
+{% block title %}
+    instagram / Post List
+{% endblock title %}
+
+{% block content %}
+    <!-- action을 비워뒀다는 것은 다른 주소로 옮겨가지않고 현재 페이지에서 처리하겠다는 뜻이다 -->
+    <!-- form은 밑에 입력한 값을 (여기서는 q) get방식으로 전달하겠다는 뜻 -->
+    <form action="" method="get">
+        <!-- q라는 이름으로 전달을 하겠다는 뜻, 검색이 끝나면 다시 q 값을 view에서 전달 받아서 text 상자에 표시해준다 -->
+        <input type = "text" name="q" value="{{ q }}"/>    
+        <input type = 'submit' value = '검색' />
+
+    </form>
+
+    <a href="{% url 'instagram:post_new' %}" class="btn btn-primary btn-block mt-3 mb-1">새 포스팅</a>
+
+    <table class='table table-bordered table-hover'>
+        <tbody>
+            {% for post in post_list %}
+                <tr>
+                    <td>
+                        {{post.pk}}
+                    </td>
+                    <td>
+                        {% if post.photo %}
+                            <img src="{{post.photo.url}}" style="width : 100px;">
+                        {% else %}
+                            No Photo
+                        {% endif %}
+                    </td>
+                    <td>
+                        <!-- <a href="{% url 'instagram:post_detail' post.pk %}"> -->
+                        <!-- 위에 처럼 써도 되지만 model에 get_absolute_url 함수를 정의해줬다면 이렇게 써도 된다 -->
+                        <a href = "{{ post.get_absolute_url}}">
+                            {{post.message}}
+                        </a>
+                        <!-- </a> -->
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_paginated %}
+        {% bootstrap_pagination page_obj size='large' justify_content='center' %}
+    {% endif %}
+{% endblock content %}

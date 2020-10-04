@@ -31,12 +31,21 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # django apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # third apps
+    'django_extensions',
+    'debug_toolbar',
+    'bootstrap4',
+    # local apps
+    'instagram',
+    'accounts',
+    
 ]
 
 MIDDLEWARE = [
@@ -47,6 +56,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #third
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'ask_django.urls'
@@ -54,7 +65,10 @@ ROOT_URLCONF = 'ask_django.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            # file system template loader
+            os.path.join(BASE_DIR, 'ask_django','templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -118,3 +132,25 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STARIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'ask_django', 'static')
+]
+
+MEDIA_URL = '/media/'   # 파일에 url로 접근시 사용됨
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')    # BASE_DIR의 media 폴더에 실제 파일들을 저장해라
+
+INTERNAL_IPS = ['127.0.0.1']
+
+AUTH_USER_MODEL = 'auth.User'  # user 등록
+
+
+from django.contrib.messages import constants as messages_constants
+
+MESSAGE_TAGS = {
+    messages_constants.DEBUG: 'secondary',
+    messages_constants.ERROR: 'danger',
+}
+
+from django.urls import reverse_lazy
+LOGOUT_REDIRECT_URL = reverse_lazy('login')
